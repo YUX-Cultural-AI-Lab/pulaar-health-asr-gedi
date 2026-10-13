@@ -140,3 +140,41 @@ A `CITATION.cff` file can be added when the authors, publication details, and pr
 
 The repository license will be specified after confirming the ownership and sharing permissions for the code and documentation. Dataset and model licenses may differ from the repository's software license.
 
+
+# Pulaar ASR Evaluation (Fouta Toro dialect)
+
+A single script that evaluates a fine-tuned **Wav2Vec2-CTC** speech recognition
+model on Pulaar test data and reports **WER** (Word Error Rate) and **CER**
+(Character Error Rate).
+
+## Quick start
+
+```bash
+git clone <your-repo-url>
+cd pulaar-asr-eval
+pip install -r requirements.txt
+
+# Evaluate on the Pulaar test set
+python evaluate_asr.py --model <path-or-hub-id-of-your-model> --dataset pulaar
+
+# Evaluate on Google FLEURS (Fula, Senegal), 50 random samples
+python evaluate_asr.py --model <path-or-hub-id-of-your-model> --dataset fleurs --num-samples 50
+```
+
+If the model or dataset is private, log in once with `huggingface-cli login`
+(or set the `HF_TOKEN` environment variable).
+
+## Options
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--model` | Local folder or Hugging Face Hub model id (**required**) | – |
+| `--dataset` | `pulaar`, `fleurs`, or any Hub dataset id | `pulaar` |
+| `--config` | Dataset config (e.g. `ff_sn`) | preset |
+| `--split` | Split to evaluate | `test` |
+| `--text-column` | Column with the reference text | `transcription` |
+| `--num-samples` | Random subset size | whole split |
+| `--seed` | Shuffle seed (reproducibility) | `42` |
+| `--normalize` | Lowercase + remove punctuation before scoring | off |
+| `--device` | `cuda` or `cpu` | auto |
+| `--output-dir` | Output folder | `results/` |
