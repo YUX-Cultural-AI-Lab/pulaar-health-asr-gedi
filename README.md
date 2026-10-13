@@ -6,14 +6,11 @@ ASR can improve maternal healthcare access, but limited data and linguistic dive
 
 This project explores the development and evaluation of ASR for Pulaar maternal and reproductive health communication, with a focus on **Gender, Equity, Diversity, and Inclusion (GEDI)**.
 
-The project was conducted under the **GRAIN EmpowerHerAI initiative**, with a focus on representing diverse speakers, capturing regional linguistic variation, and evaluating the technology beyond overall transcription accuracy.
-
 ## Objectives
 
 - Adapt open-source ASR models to Pulaar maternal and reproductive health speech.
 - Evaluate speech recognition across the Fuuta Tooro and Fuuta Jallon dialects.
 - Examine potential disparities related to gender, dialect, accent, and code-switching.
-- Integrate linguistic expertise and community feedback into data validation and system evaluation.
 - Assess usability and accessibility in realistic use conditions.
 
 ## Methodology
@@ -22,13 +19,16 @@ The project followed a GEDI-informed approach throughout the ASR development and
 
 ### 1. Data Collection and Validation
 
-We collected maternal and reproductive health utterances from **40 Pulaar speakers**, covering the Fuuta Tooro and Fuuta Jallon dialects and including women with disabilities.
+- We collected maternal and reproductive health utterances from **40 Pulaar speakers**, covering the Fouta Toro and Fouta Djallion dialects and including women with disabilities.
 
-Data validation involved linguistic expertise, translation review, and maternal-health specialists to improve the accuracy and contextual relevance of the collected utterances.
+- Data validation involved linguistic expertise, translation review, and maternal-health specialists to improve the accuracy and contextual relevance of the collected utterances.
+
+
 
 ### 2. Model Benchmarking and Fine-Tuning
 
 Open-source ASR models were benchmarked on Pulaar health-related speech using Word Error Rate (WER) and Character Error Rate (CER). A selected model was fine-tuned on the collected data to improve recognition of domain-specific vocabulary and dialectal variation.
+
 
 ### 3. GEDI-Informed Evaluation
 
@@ -45,6 +45,40 @@ User testing involved approximately 10 participants across diverse speaker group
 
 Testing considered transcription quality, dialectal fidelity, and platform usability in quiet and noisy environments. Participants rated the evaluated aspects on a scale from 1 (Very Poor) to 5 (Excellent).
 
+We provide:
+
+1. **A test dataset** of 200 maternal-health audio samples with transcriptions,
+   speaker **gender** and **dialect**: <DATASET_LINK>
+2. **Our reference results**, obtained with our own model
+   ([`YUXCulturalAILab/wav2vec_pular_maternalhealth`](https://huggingface.co/YUXCulturalAILab/wav2vec_pular_maternalhealth)),
+   in [`reference/`](reference/).
+3. **An evaluation script** so you can run *your* model on the same data and
+   compare your scores with ours, overall and by gender and dialect.
+4. **A user testing and validation protocol (Stage 6)** with our results from real
+   users, including Community Health Workers and linguists: [`user_testing/`](user_testing/).
+
+## Two layers of evaluation
+
+| Layer | What it tells you | Where |
+|-------|-------------------|-------|
+| **Automatic benchmark** | WER / CER against reference transcriptions, overall and by gender and dialect | this page + `evaluate_asr.py` |
+| **Stage 6: User testing & validation** | Whether the transcriptions are accurate, meaningful, usable and faithful to the dialect for real users (GEDI lens) | [`user_testing/`](user_testing/README.md) |
+
+### Stage 6 results at a glance
+
+| Dimension | Score |
+|-----------|-------|
+| ASR quality | 4 / 5 |
+| Dialect and linguistic fidelity | 3 / 5 |
+| Platform usability | 5 / 5 |
+| **Overall** | **4 / 5** |
+
+Usability and ASR quality were rated well. The main gap is **dialect and linguistic
+diversity**, which is why the automatic benchmark reports results by dialect.
+Details, participants and protocol: [`user_testing/README.md`](user_testing/README.md).
+
+
+
 ## Key Results
 
 | Evaluation measure | Result |
@@ -55,6 +89,8 @@ Testing considered transcription quality, dialectal fidelity, and platform usabi
 | User-rated transcription quality | 4/5 |
 | User-rated dialect and linguistic fidelity | 3/5 |
 | User-rated platform usability | 4/5 |
+
+
 
 These results indicate improved transcription performance after fine-tuning. User testing also highlighted persistent challenges with dialect-specific expressions, accents, and spelling conventions.
 
