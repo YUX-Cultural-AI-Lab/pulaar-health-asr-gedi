@@ -1,10 +1,8 @@
-# Pulaar Health ASR: GEDI-Informed Speech Recognition
-
-**Developing and evaluating inclusive speech recognition for Pulaar maternal and reproductive health communication.**
+# Beyond Accuracy: Building Inclusive Speech Recognition for Pulaar Through a Gender and Dialect Lens
 
 ## Overview
 
-Automatic Speech Recognition (ASR) can help make health communication more accessible by converting spoken language into text. However, ASR systems often struggle with low-resource African languages, dialectal variation, local health terminology, and code-switching.
+ASR can improve maternal healthcare access, but limited data and linguistic diversity make it difficult for systems to accurately recognize African languages and dialects. Overall accuracy may also hide disparities across genders and regional varieties, such as Fuuta Tooro and Fuuta Jallon Pulaar. Technical accuracy alone is not enough: inclusive AI requires active community participation to ensure systems reflect users’ lived experiences, priorities, and needs.
 
 This project explores the development and evaluation of ASR for Pulaar maternal and reproductive health communication, with a focus on **Gender, Equity, Diversity, and Inclusion (GEDI)**.
 
@@ -100,45 +98,6 @@ pulaar-health-asr-gedi/
 ```
 
 *This structure describes the proposed organization of the repository. Files should be added as the corresponding code and documentation become available.*
-
-## Responsible AI and Data Ethics
-
-Maternal and reproductive health recordings can contain sensitive personal information. Raw audio, identifiable transcripts, and participant details should not be published without appropriate consent and authorization.
-
-Any shared datasets, model weights, or evaluation outputs must comply with the relevant research ethics requirements, participant consent, privacy protections, and project data-sharing agreements.
-
-ASR-generated text may contain errors and should be reviewed by a qualified person before being used to inform healthcare decisions.
-
-## Current Limitations
-
-- The evaluation covers two Pulaar dialects and does not represent the full diversity of Pulaar-speaking communities.
-- User testing involved a relatively small number of participants.
-- Dialect and linguistic fidelity remain areas for improvement.
-- Further disaggregated evaluation is needed to establish whether performance differs systematically across gender, dialect, accent, and other relevant factors.
-
-## Future Work
-
-- Expand linguistic coverage and representation of underserved speaker groups.
-- Improve recognition of dialect-specific health terminology and code-switching.
-- Strengthen disaggregated evaluation across relevant speaker groups.
-- Extend participatory testing and accessibility assessment.
-- Release approved code, documentation, and research outputs to support reproducibility and further research.
-
-## Acknowledgements
-
-This work was conducted under the GRAIN EmpowerHerAI initiative. The project involved collaboration with linguistic and maternal-health experts and contributors to Pulaar data collection and validation.
-
-Partner acknowledgements and institutional affiliations should be finalized in accordance with project agreements.
-
-## Citation
-
-If you use this repository in your research, please cite the associated publication once available.
-
-A `CITATION.cff` file can be added when the authors, publication details, and preferred citation format are confirmed.
-
-## License
-
-The repository license will be specified after confirming the ownership and sharing permissions for the code and documentation. Dataset and model licenses may differ from the repository's software license.
 
 
 # Pulaar ASR Evaluation (Fouta Toro dialect)
@@ -396,3 +355,44 @@ python evaluate_asr.py --model YUXCulturalAILab/wav2vec_pular_maternalhealth \
 - Do not train on the test set. Doing so makes the comparison meaningless.
 - Results depend on spelling conventions, so compare WER and CER together.
 - Don't commit model weights or tokens. Host your model on the Hugging Face Hub.
+
+
+## Responsible AI and Data Ethics
+
+Maternal and reproductive health recordings can contain sensitive personal information. Raw audio, identifiable transcripts, and participant details should not be published without appropriate consent and authorization.
+
+Any shared datasets, model weights, or evaluation outputs must comply with the relevant research ethics requirements, participant consent, privacy protections, and project data-sharing agreements.
+
+ASR-generated text may contain errors and should be reviewed by a qualified person before being used to inform healthcare decisions.
+
+## Current Limitations
+
+- The evaluation covers two Pulaar dialects and does not represent the full diversity of Pulaar-speaking communities.
+- User testing involved a relatively small number of participants.
+- Dialect and linguistic fidelity remain areas for improvement.
+- Further disaggregated evaluation is needed to establish whether performance differs systematically across gender, dialect, accent, and other relevant factors.
+
+## Future Work
+
+- Expand linguistic coverage and representation of underserved speaker groups.
+- Improve recognition of dialect-specific health terminology and code-switching.
+- Strengthen disaggregated evaluation across relevant speaker groups.
+- Extend participatory testing and accessibility assessment.
+- Release approved code, documentation, and research outputs to support reproducibility and further research.
+
+## Acknowledgements
+
+This work was conducted under the GRAIN EmpowerHerAI initiative. The project involved collaboration with linguistic and maternal-health experts and contributors to Pulaar data collection and validation.
+
+Partner acknowledgements and institutional affiliations should be finalized in accordance with project agreements.
+
+## Citation
+
+If you use this repository in your research, please cite the associated publication once available.
+
+A `CITATION.cff` file can be added when the authors, publication details, and preferred citation format are confirmed.
+
+## License
+
+The repository license will be specified after confirming the ownership and sharing permissions for the code and documentation. Dataset and model licenses may differ from the repository's software license.
+
