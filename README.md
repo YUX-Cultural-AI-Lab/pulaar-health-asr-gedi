@@ -243,3 +243,156 @@ If the model or dataset is private, log in once with `huggingface-cli login`
 | `google/fleurs` `ff_sn` (test) | 100 | _xx_ |
 
 
+# Pulaar ASR Benchmark: Maternal Health
+
+A small benchmark for Pulaar (Fouta Toro) speech recognition in the maternal-health domain.
+
+We provide:
+
+1. **A test dataset** of 200 maternal-health audio samples with transcriptions,
+   speaker **gender** and **dialect**: <DATASET_LINK>
+2. **Our reference results**, obtained with our own model
+   ([`YUXCulturalAILab/wav2vec_pular_maternalhealth`](https://huggingface.co/YUXCulturalAILab/wav2vec_pular_maternalhealth)),
+   in [`reference/`](reference/).
+3. **An evaluation script** so you can run *your* model on the same data and
+   compare your scores with ours, overall and by gender and dialect.
+
+## Reference results (ours)
+
+| Group | Samples | WER % | CER % |
+|-------|---------|-------|-------|
+| **Overall** | 200 | _fill in_ | _fill in_ |
+| Gender: female | _ | _ | _ |
+| Gender: male | _ | _ | _ |
+| Dialect: _name_ | _ | _ | _ |
+| Dialect: _name_ | _ | _ | _ |
+
+Full numbers: [`reference/results.json`](reference/results.json) and
+[`reference/predictions.csv`](reference/predictions.csv).
+
+## Evaluate your own model
+
+Your model must be a **Wav2Vec2 model with a CTC head** (`Wav2Vec2ForCTC`),
+stored in a local folder or on the Hugging Face Hub.
+
+```bash
+git clone <your-repo-url>
+cd pulaar-asr-eval
+pip install -r requirements.txt
+
+python evaluate_asr.py --model your-username/your-pulaar-model
+# or a local folder:
+python evaluate_asr.py --model ./path/to/your/model
+```
+
+The dataset is downloaded automatically. If something is private, run
+`huggingface-cli login` first (or set `HF_TOKEN`).
+
+### What you get
+
+The script prints your scores next to ours:
+
+```
+=== RESULTS (WER %) ===
+                          n    yours     ours   difference
+OVERALL                 200    xx.xx    xx.xx   +x.xx  (worse)
+gender=female           xx    xx.xx    xx.xx   ...
+gender=male             xx    xx.xx    xx.xx   ...
+dialect=...             xx    xx.xx    xx.xx   ...
+```
+
+and saves, in `results/`:
+
+| File | Content |
+|------|---------|
+| `results.json` | Overall + per-gender + per-dialect WER/CER |
+| `breakdown.csv` | Same breakdown as a table |
+| `predictions.csv` | Reference vs prediction for every sample, with gender and dialect |
+
+Groups with fewer than 10 samples are flagged `[few samples]`. Their scores
+are noisy, so read them with care.
+
+### Options
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--model` | Local folder or Hub model id (**required**) | – |
+| `--dataset` | Hub dataset id | our maternal-health set |
+| `--split` | Split to evaluate | `test` |
+| `--text-column` | Column with reference text | `transcription` |
+| `--gender-column` | Column with speaker gender | `gender` |
+| `--dialect-column` | Column with speaker dialect | `dialect` |
+| `--num-samples` | Random subset (quick test) | all |
+| `--normalize` | Lowercase and strip punctuation before scoring | off |
+| `--reference` | Reference results to compare with | `reference/results.json` |
+| `--device` | `cuda` or `cpu` | auto |
+| `--output-dir` | Output folder | `results/` |
+| `--seed` | Shuffle seed | `42` |
+
+> For a fair comparison with our numbers, run with the default settings
+> (no `--normalize`, no `--num-samples`).
+
+## The pipeline
+
+```
+ Maternal-health dataset                    Your Wav2Vec2-CTC model
+ (audio, transcription, gender, dialect)    (local folder or Hub)
+          │                                          │
+          ▼                                          │
+  1. Load split, keep audio as raw bytes,            │
+     read gender + dialect labels                    │
+          │                                          │
+          ▼                                          ▼
+  2. Decode with SoundFile ─────────────────► 3. Preprocess
+     → mono → resample to 16 kHz                (Wav2Vec2Processor)
+                                                     │
+                                                     ▼
+                                             4. Forward pass → logits
+                                                     │
+                                                     ▼
+                                             5. Greedy CTC decoding → text
+                                                     │
+        reference transcription ─────────────────────┤
+                                                     ▼
+                                      6. WER / CER with jiwer
+                                         ├─ overall
+                                         ├─ by gender
+                                         └─ by dialect
+                                                     │
+                                                     ▼
+                              7. Compare with reference/results.json
+                                 + save results/*.json, *.csv
+```
+
+1. **Data loading.** Audio is read as raw WAV bytes (`decode=False`) and decoded
+   with SoundFile, which avoids the TorchCodec requirement of recent `datasets`
+   versions. Gender and dialect labels are read from the dataset columns.
+2. **Audio preparation.** Stereo is averaged to mono, then resampled to the
+   model's sampling rate (16 kHz).
+3. **Feature extraction.** `Wav2Vec2Processor` normalises the waveform.
+4. **Inference.** The model gives, for every ~20 ms frame, scores over the
+   character vocabulary.
+5. **Decoding.** Greedy CTC: take the best token per frame, merge repeats, drop
+   blanks. No language model is used, for fairness and simplicity.
+6. **Scoring.**
+   - **WER** = (substitutions + deletions + insertions) / reference words.
+     It can exceed 100%.
+   - **CER** = the same at character level. It is gentler on spelling variation
+     (e.g. `pulaagu` vs `puraagu` is one wrong word in WER but one wrong character in CER).
+   - Scores are computed over all words of a group (not averaged per sentence),
+     separately for each gender value and each dialect value.
+7. **Comparison.** Your scores are printed next to the reference scores, with the
+   difference. Negative means better than ours.
+
+## Reproducing our reference results
+
+```bash
+python evaluate_asr.py --model YUXCulturalAILab/wav2vec_pular_maternalhealth \
+    --output-dir reference
+```
+
+## Notes
+
+- Do not train on the test set. Doing so makes the comparison meaningless.
+- Results depend on spelling conventions, so compare WER and CER together.
+- Don't commit model weights or tokens. Host your model on the Hugging Face Hub.
