@@ -155,10 +155,10 @@ cd pulaar-asr-eval
 pip install -r requirements.txt
 
 # Evaluate on the Pulaar test set
-python evaluate_asr.py --model <path-or-hub-id-of-your-model> --dataset pulaar
+python evaluate_asr.py --model <YUXCulturalAILab/wav2vec_pular_maternalhealth> --dataset pulaar
 
 # Evaluate on Google FLEURS (Fula, Senegal), 50 random samples
-python evaluate_asr.py --model <path-or-hub-id-of-your-model> --dataset fleurs --num-samples 50
+python evaluate_asr.py --model <YUXCulturalAILab/wav2vec_pular_maternalhealth> --dataset fleurs --num-samples 50
 ```
 
 If the model or dataset is private, log in once with `huggingface-cli login`
@@ -168,13 +168,78 @@ If the model or dataset is private, log in once with `huggingface-cli login`
 
 | Flag | Description | Default |
 |------|-------------|---------|
-| `--model` | Local folder or Hugging Face Hub model id (**required**) | – |
+| `--model` | YUXCulturalAILab/wav2vec_pular_maternalhealth | – |
 | `--dataset` | `pulaar`, `fleurs`, or any Hub dataset id | `pulaar` |
 | `--config` | Dataset config (e.g. `ff_sn`) | preset |
 | `--split` | Split to evaluate | `test` |
 | `--text-column` | Column with the reference text | `transcription` |
-| `--num-samples` | Random subset size | whole split |
+| `--num-samples` | 50 samples | or whole split |
 | `--seed` | Shuffle seed (reproducibility) | `42` |
 | `--normalize` | Lowercase + remove punctuation before scoring | off |
 | `--device` | `cuda` or `cpu` | auto |
 | `--output-dir` | Output folder | `results/` |
+
+## The pipeline
+
+```
+ Hugging Face dataset            Wav2Vec2-CTC model
+ (audio + transcription)         (local folder or Hub)
+          │                               │
+          ▼                               │
+  1. Load split, shuffle (seed),          │
+     keep audio as raw WAV bytes          │
+          │                               │
+          ▼                               ▼
+  2. Decode bytes with SoundFile ──► 3. Preprocess
+     → mono → resample to 16 kHz        (Wav2Vec2Processor: normalise waveform)
+                                              │
+                                              ▼
+                                      4. Forward pass → logits
+                                              │
+                                              ▼
+                                      5. Greedy CTC decoding
+                                         (argmax per frame, collapse repeats,
+                                          remove blanks) → text
+                                              │
+          reference transcription ────────────┤
+                                              ▼
+                                      6. WER / CER (jiwer)
+                                              │
+                                              ▼
+                                   results/results.json
+                                   results/predictions.csv
+```
+
+**Step by step**
+
+1. **Data loading.** Only the requested split is downloaded. Audio is loaded with
+   `decode=False` so we get the raw WAV bytes and decode them ourselves with
+   SoundFile (this avoids the TorchCodec requirement of recent `datasets`).
+2. **Audio preparation.** Stereo is averaged to mono and the signal is resampled to
+   the rate the model was trained on (16 kHz for Wav2Vec2).
+3. **Feature extraction.** `Wav2Vec2Processor` normalises the waveform into model inputs.
+4. **Inference.** The model outputs, for every ~20 ms audio frame, a probability
+   distribution over the character vocabulary (logits).
+5. **Decoding.** Greedy CTC decoding: take the most likely token per frame, merge
+   consecutive duplicates, drop the blank token. No language model is used.
+6. **Scoring.**
+   - **WER** = (substitutions + deletions + insertions) / number of reference words.
+     It can exceed 100% when the model outputs many wrong extra words.
+   - **CER** = same idea at character level. It is usually more informative for a
+     language with a young standard orthography like Pulaar, where a one-letter
+     spelling difference (`pulaagu` vs `puraagu`) counts as a whole wrong word in WER.
+
+## Outputs
+
+- `results/results.json` – model, dataset, number of samples, WER, CER, runtime.
+- `results/predictions.csv` – reference, prediction and per-sample WER for every
+  example, handy for error analysis.
+
+## Results
+
+| Dataset | Samples | WER |
+|---------|---------|-----|
+| `guizme/Pulaar` (test) | 100 | --xx-- |
+| `google/fleurs` `ff_sn` (test) | 100 | _xx_ |
+
+
