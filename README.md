@@ -294,7 +294,7 @@ To come ...
 
 ## License
 
-The code and documentation in this repository are licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
+The code and documentation in this repository are licensed under the Apache License 2.0. See the [LICENSE](LICENSE.md) file for details.
 
 Dataset and model licenses may differ from the repository's software license. Please refer to the relevant dataset and model documentation for their respective terms of use.
 
