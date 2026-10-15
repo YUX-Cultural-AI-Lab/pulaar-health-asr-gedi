@@ -4,39 +4,87 @@
 
 ASR can improve maternal healthcare access, but limited data and linguistic diversity make it difficult for systems to accurately recognize African languages and dialects. Overall accuracy may also hide disparities across genders and regional varieties, such as Fouta Toro and Fouta Jallon Pulaar. Technical accuracy alone is not enough: inclusive AI requires active community participation to ensure systems reflect users’ lived experiences, priorities, and needs.
 
-This project explores the development and evaluation of ASR for Pulaar maternal and reproductive health communication, with a focus on **Gender, Equity, Diversity, and Inclusion (GEDI)**.
+This study presents a Gender, Equity, Diversity, and Inclusion (GEDI) approach to developing and evaluating Pulaar ASR in multidialect languages(settings) in Africa
+
+#### Repository Structure
+
+```text
+pulaar-health-asr-gedi/
+├── Overview
+├── Objectives
+├── Methodology
+├── GEDI integration over AI cycle
+├── src/
+│   ├── preprocessing.py
+│   └── training.py
+├── data/
+│   └── pular_dataset.csv
+├── evaluation/
+│   ├── benchmark_asr.py
+│   └── metrics.py
+├── results/
+│   ├── Eval_results.csv
+│   └── benchmark_results.csv
+├── requirements.txt
+├── CITATION.cff
+├── LICENSE
+└── README.md
+```
 
 ## Objectives
 
-- Adapt open-source ASR models to Pulaar maternal and reproductive health speech.
-- Evaluate speech recognition across the Fouta Toro and Fouta Djalion dialects.
-- Examine potential disparities related to gender, dialect, accent, and code-switching.
-- Assess usability and accessibility in realistic use conditions.
-- Test and apply GEDI Matrix throughout the the project  
+- Integrated GEDI considerations across the AI lifecycle, from community engagement and data collection to model training, evaluation, deployment, and user testing
+ 
 
 ## Methodology
 
-The project followed a GEDI-informed approach throughout the ASR development and evaluation process.The framework assesses where innovation might unintentionally exclude or harm the populations it aims to serve. It helped us identify gaps across women, communities, dialects, and regions, using these insights to improve the system and embed the GRAIN GEDI “Design-by-Inclusion” Standard throughout the ASR engine lifecycle.
+We integrated GEDI considerations across the AI lifecycle, We collected speech data from 40 speakers across the Fuuta Tooro and Fuuta Dallon dialects, including women with disabilities, with linguistic and maternal-health experts supporting validation. We fine-tuned the ASR model and evaluated transcription performance using WER, alongside dialect fidelity and linguistic accuracy. Finally, user testing assessed transcription quality, dialect representation, and platform usability.
+
+We also provide an evaluation script that enables researchers to assess their own ASR models on Pulaar maternal-health speech data and compare their performance against our state-of-the-art model.
 
 ### Stage 1 & 2 : Community Engagement & Data collection
 
 - The initial phase focused on deeply understanding the target community, assessing local access to technology, and aligning our research objectives with real-world needs. A central question guided this stage: Are we addressing a genuine community priority, a technical research gap, or both?
 
-- This community-led approach directly shaped our dataset. We recorded 40 diverse speakers—including women with disabilities—covering two key Pulaar dialects: Fouta Toro and Fouta Djalion. We worked with two translators and an expert linguist for language accuracy, and engaged two maternal health experts to validate health terms across both dialects. This ensured marginalized voices and regional variations were accurately represented from day one.
+- This community-led approach directly shaped our dataset. We recorded 40 diverse speakers—including women with disabilities—covering two key Pulaar dialects: Fouta Toro and Fouta Djalion. We worked with two translators and an expert linguist for language accuracy, and engaged two maternal health experts to validate health terms across both dialects and sociologists and social-behavioural experts with experience working in rural areas helped us understand community priorities and lived realities.
 
 
 ## Stage 3 & 4. Model Benchmarking and Fine-Tuning
 
 Open-source ASR models were benchmarked on Pulaar health-related speech using Word Error Rate (WER) and Character Error Rate (CER). A selected model was fine-tuned on the collected data to improve recognition of domain-specific vocabulary and dialectal variation.
 
-#### Key Results
+## Reproducing our banchmarking
 
-| Evaluation measure | Result |
-|---|---:|
-| Baseline WER | Approximately 43% |
-| Fine-tuned WER | Approximately 28% |
+```bash
+git clone <https://github.com/YUX-Cultural-AI-Lab/pulaar-health-asr-gedi>
+cd pulaar-asr-eval
+pip install -r requirements.txt
 
-#### GEDI-Informed Evaluation
+# Evaluate on maternal health dataset covering 2 Pular dialects over 200 samples
+
+ python evaluation/benchmark_asr.py 
+ --model "YUXCulturalAILab/wav2vec_pular_maternalhealth"
+ --dataset data/test_manifest.csv 
+ --num-samples 200  
+ 
+```
+  
+- #### Benchmarking on maternal health pular dataset
+
+| ASR Models |Architecture | WER (Word Error rate)| CER (character Error rate)|
+|---|---|---|---:|
+|Wav2Vec2-Fula |Wav2Vec2|  43.81 %| 14.14 % |
+| ASR-Africa-Fula |Wav2Vec2| 91.24% | 32.88 %|
+| Whisper-Large-v3 |Whisper|  124.02 %| 61.38 %|
+
+- #### Key Results after finetuning
+
+| models | WER (Word Error rate)| CER (character Error rate)|
+|---|---|---:|
+|Wav2Vec2-Fula (Baseline ) | 43.81 %| 14.14 % |
+| Wav2Vec2-Fula (finetuned ) | 28.81% | 7.97 %|
+
+- #### GEDI-Informed Evaluation
 
 The evaluation considered potential recognition challenges across:
 
@@ -45,35 +93,21 @@ The evaluation considered potential recognition challenges across:
 - **Accent:** Differences in pronunciation and speaking patterns.
 - **Code-switching:** Speech that mixes Pulaar with French or other languages.
 
-
-
-
-### 5. Testing Beyond the Laboratory
-
+## 5. Testing Beyond the Laboratory
 
 We tested the system not only for speech-to-text accuracy, but also for how well it serves underserved Pulaar-speaking women in real-world healthcare contexts.
 
 #### Testing approach under GEDI Lens
 
-- **Real-world conditions**: Tested in both quiet and noisy environments.
-- **Speech robustness**: Spontaneous speech participants created their own narratives and spoke naturally to test real-time transcription in realistic situations and predefined scenarios, participants followed structured scenarios designed to assess how accuracy varied across accent, region, gender, and dialect.
-- **Usability & accessibility**: Evaluated ease of use, comprehension, and overall user experience using likert scale 
-- **Cultural & linguistic fit** : Examined dialects, local expressions, and lived contexts.
+- **Automatic benchmark** : WER / CER against reference transcriptions, overall and by gendern`evaluate_asr.py`
+   - **Real-world conditions**: Tested in both quiet and noisy environments.
+  - **Speech robustness**: Spontaneous and read speech
 
+- **User testing & field validation** Assess how effectively the system serves community. 
+   - **Usability & accessibility**: Evaluated ease of use, comprehension, and overall user experience using likert scale, accesibility, , trust, usefulness
+   - **Cultural & linguistic fit** : Examined dialects, local expressions, language fidelity, and lived contexts.
 
-Scoring Principle: Each aspect is rated from 1 to 5 using clear criteria to ensure consistent evaluation across participants and testing sessions. (1 = Very Poor → 5 = Excellent)
-
-#### Participant
-
-We worked with ~10 users from diverse speaker groups and dialects across Senegal. Most participants were women, with a focus on underserved communities. The testing also included 2 community health workers and 2 linguists to assess health terminology, local expressions, and dialectal accuracy.
-
-
-#### Two layers of evaluation
-
-| Layer | What it tells you | Where |
-|-------|-------------------|-------|
-| **Automatic benchmark** | WER / CER against reference transcriptions, overall and by gender and dialect | this page + `evaluate_asr.py` |
-| **Stage 6: User testing & validation** | Whether the transcriptions are accurate, meaningful, usable and faithful to the dialect for real users (GEDI lens) | [`user_testing/`](user_testing/README.md) |
+<i> Scoring Principle: Each aspect is rated from 1 to 5 using clear criteria (1 = Very Poor → 5 = Excellent)<i>
 
 #### results at a glance
 
@@ -82,57 +116,28 @@ We worked with ~10 users from diverse speaker groups and dialects across Senegal
 | ASR quality | 4 / 5 |
 | Dialect and linguistic fidelity | 3 / 5 |
 | Platform usability | 5 / 5 |
-| **Overall** | **4 / 5** |
 
-Usability and ASR quality were rated well. The main gap is **dialect and linguistic
-diversity**, which is why the automatic benchmark reports results by dialect.
+
+Usability and ASR quality were rated well. The main gap is **dialect and linguistic diversity**, which is why the automatic benchmark reports results by dialect.
 Details, participants and protocol: [`user_testing/README.md`](user_testing/README.md).
 
 These results indicate improved transcription performance after fine-tuning. User testing also highlighted persistent challenges with dialect-specific expressions, accents, and spelling conventions.
 
 
-## 6. Repository Structure
-
-```text
-pulaar-health-asr-gedi/
-├── docs/
-│   ├── methodology.md
-│   ├── gedi_framework.md
-│   └── data_collection.md
-├── src/
-│   ├── preprocessing/
-│   └── training/
-├── evaluation/
-│   ├── benchmarking.py
-│   ├── metrics.py
-│   └── gedi_evaluation.md
-├── results/
-│   └── benchmark_results.csv
-├── requirements.txt
-├── CITATION.cff
-├── LICENSE
-└── README.md
-```
-
 *This structure describes the proposed organization of the repository. Files should be added as the corresponding code and documentation become available.*
 
- # Part II:  Evaluate your own model on maternalth dataset 
+ ## Part II:  Evaluate your own model on maternal health dataset 
 
-A single script that evaluates a fine-tuned **Wav2Vec2-CTC** speech recognition
-model on Pulaar test data and reports **WER** (Word Error Rate) and **CER**
-(Character Error Rate).
+A single script that evaluates a fine-tuned **Wav2Vec2-CTC** speech recognition model on Pulaar test data and reports **WER** (Word Error Rate) and **CER** (Character Error Rate).
 
 We provide:
 
-1. **A test dataset** of 200 maternal-health audio samples with transcriptions,
-   speaker **gender** and **dialect**: <DATASET_LINK>
+1. **A test dataset** of 200 maternal-health audio samples with transcriptions, speaker **gender** and **dialect**: <DATASET_LINK>
 2. **Our reference results**, obtained with our own model
    ([`YUXCulturalAILab/wav2vec_pular_maternalhealth`](https://huggingface.co/YUXCulturalAILab/wav2vec_pular_maternalhealth)),
-   in [`reference/`](reference/).
-3. **An evaluation script** so you can run *your* model on the same data and
-   compare your scores with ours, overall and by gender and dialect.
-4. **A user testing and validation protocol (Stage 6)** with our results from real
-   users, including Community Health Workers and linguists: [`user_testing/`](user_testing/).
+   in [`results /`](results/).
+3. **An evaluation script** so you can run *your* model on the same data and compare your scores with ours, overall and by gender and dialect.
+4. **A user testing and validation protocol (Stage 6)** with our results from real users, including Community Health Workers and linguists: [`user_testing/`](user_testing/).
 
 ## Quick start
 
@@ -142,12 +147,9 @@ cd pulaar-asr-eval
 pip install -r requirements.txt
 
 # Evaluate on maternal health dataset covering 2langages over 200 samples
- python evaluate_asr.py --model <your-username/your-pulaar-model> --dataset pularheath --num-samples 200  # if your model is on huggingface
+ python evaluate_asr.py --model <your-username/your-model> --dataset data/ --num-samples 200  # if your model is on huggingface
  python evaluate_asr.py --model ./path/to/your/model # or a local folder:
 ```
-
-Your model must be a **Wav2Vec2 model with a CTC head** (`Wav2Vec2ForCTC`),
-stored in a local folder or on the Hugging Face Hub.
 
 The dataset is downloaded automatically. If something is private, run
 `huggingface-cli login` first (or set `HF_TOKEN`).
@@ -228,21 +230,13 @@ The dataset is downloaded automatically. If something is private, run
      language with a young standard orthography like Pulaar, where a one-letter
      spelling difference (`pulaagu` vs `puraagu`) counts as a whole wrong word in WER.
 
-## Outputs
+#### Outputs
 
 - `results/results.json` – model, dataset, number of samples, WER, CER, runtime.
 - `results/predictions.csv` – reference, prediction and per-sample WER for every
   example, handy for error analysis.
 
-## Our results Results on different models
-
-| Dataset | Samples | WER |
-|---------|---------|-----|
-| `guizme/Pulaar` (test) | 100 | --xx-- |
-| `google/fleurs` `ff_sn` (test) | 100 | _xx_ |
-
-
-### What you get
+#### What you get
 
 The script prints your scores next to ours:
 
@@ -250,9 +244,6 @@ The script prints your scores next to ours:
 === RESULTS (WER %) ===
                           n    yours     ours   difference
 OVERALL                 200    xx.xx    xx.xx   +x.xx  (worse)
-gender=female           xx    xx.xx    xx.xx   ...
-gender=male             xx    xx.xx    xx.xx   ...
-dialect=...             xx    xx.xx    xx.xx   ...
 ```
 
 and saves, in `results/`:
@@ -263,17 +254,8 @@ and saves, in `results/`:
 | `breakdown.csv` | Same breakdown as a table |
 | `predictions.csv` | Reference vs prediction for every sample, with gender and dialect |
 
-Groups with fewer than 10 samples are flagged `[few samples]`. Their scores
-are noisy, so read them with care.
 
-## Reproducing our reference results
-
-```bash
-python evaluate_asr.py --model YUXCulturalAILab/wav2vec_pular_maternalhealth \
-    --output-dir reference
-```
-
-## Notes
+#### Notes
 
 - Do not train on the test set. Doing so makes the comparison meaningless.
 - Results depend on spelling conventions, so compare WER and CER together.
@@ -297,12 +279,9 @@ ASR-generated text may contain errors and should be reviewed by a qualified pers
 
 ## Future Work
 
-- Expand linguistic coverage and representation of underserved speaker groups.
-- Improve recognition of dialect-specific health terminology and code-switching.
-- Strengthen disaggregated evaluation across relevant speaker groups.
-- Extend participatory testing and accessibility assessment.
-- Release approved code, documentation, and research outputs to support reproducibility and further research.
+**01 — Expand Speech Data Collection**: Extend Pulaar ASR coverage beyond Fouta Toro (Senegal) and Fouladou to additional Fulfulde varieties, including those spoken in Nigeria, prioritizing underserved speakers, dialect-specific health terminology, and code-switching.
 
+**02 — Two-Way Voice Healthcare**: Develop a voice-based healthcare solution that transcribes patient–provider interactions, translates between Pulaar and healthcare providers’ languages, and delivers doctors’ responses in spoken Pulaar to improve access to maternal healthcare.
 ## Acknowledgements
 
 This work was conducted under the GRAIN EmpowerHerAI initiative. The project involved collaboration with linguistic and maternal-health experts and contributors to Pulaar data collection and validation.
@@ -311,11 +290,11 @@ Partner acknowledgements and institutional affiliations should be finalized in a
 
 ## Citation
 
-If you use this repository in your research, please cite the associated publication once available.
-
-A `CITATION.cff` file can be added when the authors, publication details, and preferred citation format are confirmed.
+To come ...
 
 ## License
 
-The repository license will be specified after confirming the ownership and sharing permissions for the code and documentation. Dataset and model licenses may differ from the repository's software license.
+The code and documentation in this repository are licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
+
+Dataset and model licenses may differ from the repository's software license. Please refer to the relevant dataset and model documentation for their respective terms of use.
 
