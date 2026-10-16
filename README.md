@@ -119,7 +119,7 @@ A single script that evaluates a fine-tuned **Wav2Vec2-CTC** speech recognition 
 
 We provide:
 
-1. **A test dataset** of 200 maternal-health audio samples with transcriptions, speaker **gender** and **dialect**: <DATASET_LINK>
+1. **A test dataset** of 100 maternal-health audio samples with transcriptions, speaker **gender** and **dialect**: <DATASET_LINK>
 2. **Our reference results**, obtained with our own model
    ([`YUXCulturalAILab/wav2vec_pular_maternalhealth`](https://huggingface.co/YUXCulturalAILab/wav2vec_pular_maternalhealth)),
    in [`results /`](results/).
