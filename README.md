@@ -4,12 +4,6 @@
 
 ## Overview
 
-
-<span style="font-family: Google Sans Text;">Pulaar Health ASR</span>
-<h2 style="color: #38BDF8;">Pulaar Health ASR</h1>
-<h2 style="color: #134E4A;">Pulaar Health ASR</h1>
-<h2 style="color: #166534;">Pulaar Health ASR</h1>
-<span style="color: #166534;">Pulaar Health ASR</span>
 ASR can improve maternal healthcare access, but limited data and linguistic diversity make it difficult for systems to accurately recognize African languages and dialects. Overall accuracy may also hide disparities across genders and regional varieties, such as Fuuta Toro and Fuuta Jalon Pulaar. Technical accuracy alone is not enough: inclusive AI requires active community participation to ensure systems reflect users’ lived experiences, priorities, and needs.
 
 This study presents a Gender, Equity, Diversity, and Inclusion (GEDI) approach to developing and evaluating Pulaar ASR in multidialect languages(settings) in Africa
@@ -31,10 +25,12 @@ pulaar-health-asr-gedi/
 │   └── pular_dataset.csv
 ├── evaluation/
 │   ├── benchmark_asr.py
-│   └── metrics.py
+│   └── eval_asr.py
 ├── results/
 │   ├── Eval_results.csv
-│   └── benchmark_results.csv
+│   ├── benchmark_results.csv
+│   ├── Eval_results.json
+│   └── benchmark_results.json
 ├── requirements.txt
 ├── CITATION.cff
 ├── LICENSE
