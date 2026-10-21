@@ -4,3 +4,8 @@ transformers
 datasets
 soundfile
 jiwer
+pandas
+pydub
+tqdm
+tensorflow
+unicodedata2
