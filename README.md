@@ -20,8 +20,8 @@ pulaar-health-asr-gedi/
 ├── Objectives
 ├── Methodology
 ├── GEDI integration over AI cycle
+├── audios/
 ├── data/
-│   ├── audios/
 │   └── pular_dataset.csv
 ├── evaluation/
 │   ├── benchmark_asr.py
