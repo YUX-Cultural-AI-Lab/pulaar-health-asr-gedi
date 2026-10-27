@@ -140,7 +140,7 @@ pip install -r requirements.txt
  python evaluation/benchmark_asr.py 
  --model "YUXCulturalAILab/wav2vec_pular_maternalhealth"
  --dataset "YUXCulturalAILab/maternal-health-Asr-pular" 
- --num-samples 50
+ --num-samples 200
 
 # Evaluate your own model on pular dataset maternal and reproductive health
 
