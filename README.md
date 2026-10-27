@@ -121,7 +121,7 @@ A single script that evaluates a fine-tuned **Wav2Vec2-CTC** speech recognition 
 
 We provide:
 
-1. **A test dataset** of 100 maternal-health audio samples with transcriptions, speaker **gender** and **dialect**: <DATASET_LINK>
+1. **A test dataset** of 200 maternal-health audio samples with transcriptions, speaker **gender** and **dialect**: <[YUXCulturalAILab/wav2vec_pular_maternalhealth](https://huggingface.co/YUXCulturalAILab/wav2vec_pular_maternalhealth)>
 2. **Our reference results**, obtained with our own model
    ([`YUXCulturalAILab/wav2vec_pular_maternalhealth`](https://huggingface.co/YUXCulturalAILab/wav2vec_pular_maternalhealth)),
    in [`results /`](results/).
@@ -139,14 +139,14 @@ pip install -r requirements.txt
 
  python evaluation/benchmark_asr.py 
  --model "YUXCulturalAILab/wav2vec_pular_maternalhealth"
- --csv data/pular_dataset.csv 
+ --dataset "YUXCulturalAILab/maternal-health-Asr-pular" 
  --num-samples 50
 
 # Evaluate your own model on pular dataset maternal and reproductive health
 
  python evaluate_asr.py --model <your-username/your-model>  # if your model is on huggingface
- --csv data/pular_dataset.csv 
- --num-samples 100  
+ --dataset "YUXCulturalAILab/maternal-health-Asr-pular 
+ --num-samples 200  
  python evaluate_asr.py --model ./path/to/your/model # if your model is in local folder:
 ```
 
@@ -158,7 +158,7 @@ The dataset is downloaded automatically. If something is private, run
 | Flag | Description | Default |
 |------|-------------|---------|
 | `--model` | Local folder or Hub model id (**required**) | – |
-| `--csv` | Hub dataset id | our maternal-health set |
+| `--dataset` | Hub dataset id | our maternal-health set |
 | `--split` | Split to evaluate | `test` |
 | `--text-column` | Column with reference text | `transcription` |
 | `--gender-column` | Column with speaker gender | `gender` |
@@ -242,7 +242,7 @@ The script reports the overall WER and CER for your model, along with evaluation
 ----------------------------------------------------------------------
     model                        language      samples    wer    cer
 ----------------------------------------------------------------------
-your-username/your-pulaar-model  Pulaar          100    xx.xx  xx.xx
+your-username/your-pulaar-model  Pular          200    xx.xx  xx.xx
 ----------------------------------------------------------------------
 
 
@@ -250,14 +250,16 @@ your-username/your-pulaar-model  Pulaar          100    xx.xx  xx.xx
 -----------------------------------------------------------
 Model  architecture               samples    wer    cer            
 -----------------------------------------------------------
-Wav2Vec2-Fula                       100     43.81  14.14  
-ASR-Africa-Fula                     100     91.24  32.88  
-Whisper-Large-v3                    100     124.02 61.38  
-your-username/your-pulaar-model     100     xx.xx  xx.xx  
+Wav2Vec2-Fula                       200     43.81  14.14  
+ASR-Africa-Fula                     200     91.24  32.88  
+MMs-1b-all                          200     67.45  20.06
+wav2vec2-xlsr-fula.                 200     87.93 29.91
+abdouaziz/pulaar-V2.                200     100    100
+Whisper-Large-v3                    200     124.02 61.38
+your-username/your-pulaar-model     200     xx.xx  xx.xx  
 -----------------------------------------------------------
 ```
-and saves, in `results/`:
-
+and saves, in `results/banchmarks,csv`:
 
 
 | File | Content |
