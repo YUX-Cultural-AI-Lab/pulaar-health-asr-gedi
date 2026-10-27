@@ -1,0 +1,7 @@
+model,samples,wer,cer
+Wav2Vec2-Fula,200,43.81,14.14
+ASR-Africa-Fula,200,91.24,32.88
+MMS-1b-all,200,67.45,20.06
+wav2vec2-xlsr-fula,200,87.93,29.91
+abdouaziz/pulaar-V2,200,100.00,100.00
+Whisper-Large-v3,200,124.02,61.38
