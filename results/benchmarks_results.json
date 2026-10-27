@@ -1,0 +1,38 @@
+[
+  {
+    "model": "Wav2Vec2-Fula",
+    "samples": 200,
+    "wer": 43.81,
+    "cer": 14.14
+  },
+  {
+    "model": "ASR-Africa-Fula",
+    "samples": 200,
+    "wer": 91.24,
+    "cer": 32.88
+  },
+  {
+    "model": "MMS-1b-all",
+    "samples": 200,
+    "wer": 67.45,
+    "cer": 20.06
+  },
+  {
+    "model": "wav2vec2-xlsr-fula",
+    "samples": 200,
+    "wer": 87.93,
+    "cer": 29.91
+  },
+  {
+    "model": "abdouaziz/pulaar-V2",
+    "samples": 200,
+    "wer": 100.0,
+    "cer": 100.0
+  },
+  {
+    "model": "Whisper-Large-v3",
+    "samples": 200,
+    "wer": 124.02,
+    "cer": 61.38
+  }
+]
