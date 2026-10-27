@@ -1,5 +1,0 @@
-ASR model,Architecture,WER ↓,CER ↓
-Wav2Vec2-Fula,Wav2Vec2,43.81%,14.14%
-ASR-Africa-Fula,Wav2Vec2,91.24%,32.88%
-Whisper-Large-v3,Whisper,124.02%,61.38%
-Your new model,Detected/configured architecture,Computed,Computed
